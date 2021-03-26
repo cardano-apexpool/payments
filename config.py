@@ -18,8 +18,12 @@ MAGIC_NUMBER = os.getenv('MAGIC_NUMBER', '1097911063')
 
 # source addresses (in individual text files)
 # and keys (in individual text files) to sign the transactions
-SRC_ADDRESSES = [ADDRESSES_PATH + '/payment-9.addr', ADDRESSES_PATH + '/payment-10.addr']
-SRC_KEYS = [KEYS_PATH + '/payment-9.skey', KEYS_PATH + '/payment-10.skey']
+
+#SRC_ADDRESSES = [ADDRESSES_PATH + '/payment-1.addr']
+#SRC_KEYS = [KEYS_PATH + '/payment-1.skey']
+
+SRC_ADDRESSES = [ADDRESSES_PATH + '/payment-1.addr', ADDRESSES_PATH + '/payment-2.addr', ADDRESSES_PATH + '/payment-6.addr']
+SRC_KEYS = [KEYS_PATH + '/payment-1.skey', KEYS_PATH + '/payment-2.skey', KEYS_PATH + '/payment-6.skey']
 
 # destination addresses (in individual text files)
 #
@@ -38,4 +42,26 @@ SRC_KEYS = [KEYS_PATH + '/payment-9.skey', KEYS_PATH + '/payment-10.skey']
 #
 #
 DST_ADDRESSES = [ADDRESSES_PATH + '/dev_wallet.addr']
-AMOUNTS = [20000000]
+AMOUNTS = [
+    [
+        {'token': 'lovelace', 'amount': '0'},
+    ]
+]
+"""
+DST_ADDRESSES = [ADDRESSES_PATH + '/payment-2.addr', ADDRESSES_PATH + '/payment-6.addr', ADDRESSES_PATH + '/payment-1.addr']
+AMOUNTS = [
+    [
+        {'token': 'lovelace', 'amount': '20000000'},
+        {'token': '542b7ade184b6eea769f42d2d1f2902f366e0e9369b719d671e3d498.apexcoin', 'amount': '500'}
+    ],
+    [
+        {'token': 'lovelace', 'amount': '20000000'},
+        {'token': '6b8d07d69639e9413dd637a1a815a7323c69c86abbafb66dbfdb1aa7', 'amount': '2'}
+    ],
+    [
+        {'token': 'lovelace', 'amount': '10000000'},
+        {'token': '6b8d07d69639e9413dd637a1a815a7323c69c86abbafb66dbfdb1aa7', 'amount': '1'},
+        {'token': '542b7ade184b6eea769f42d2d1f2902f366e0e9369b719d671e3d498.apexcoin', 'amount': '100'}
+    ]
+]
+"""
