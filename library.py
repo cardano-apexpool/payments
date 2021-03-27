@@ -2,8 +2,6 @@ import sys
 import subprocess
 from config import *
 
-env = dict(os.environ)
-
 
 def get_transactions(address, tokens_amounts):
     """
@@ -53,7 +51,6 @@ def get_transactions(address, tokens_amounts):
                     token_transactions.append(transaction)
                     # add the tokens to total amounts to spend
                     for t in transaction['amounts']:
-                        print(t)
                         if t['token'] in tokens_amounts:
                             tokens_amounts[t['token']] += int(t['amount'])
                         else:

@@ -1,37 +1,10 @@
-#!/usr/bin/env python3
+from params import *
 
-import os
-
-# paths
-KEYS_PATH = os.getenv('KEYS_PATH', 'keys')
-ADDRESSES_PATH = os.getenv('ADDRESSES_PATH', 'addresses')
-FILES_PATH = os.getenv('FILES_PATH', 'files')
-
-# general settings
-PROTOCOL_FILE = os.getenv('PROTOCOL_FILE', FILES_PATH + '/protocol.json')
-CARDANO_ERA = os.getenv('CARDANO_ERA', 'mary')
-CARDANO_NET = os.getenv('CARDANO_NET', '--testnet-magic')
-MAGIC_NUMBER = os.getenv('MAGIC_NUMBER', '1097911063')
-TRANSACTION_EXPIRE = os.getenv('TRANSACTION_EXPIRE', 300)
 
 # payment settings
 
 # source addresses (in individual text files)
 # and keys (in individual text files) to sign the transactions
-
-SRC_ADDRESSES = [
-    ADDRESSES_PATH + '/payment-3.addr',
-    ADDRESSES_PATH + '/payment-4.addr',
-    ADDRESSES_PATH + '/payment-9.addr'
-]
-SRC_KEYS = [
-    KEYS_PATH + '/payment-3.skey',
-    KEYS_PATH + '/payment-4.skey',
-    KEYS_PATH + '/payment-9.skey'
-]
-
-# SRC_ADDRESSES = [ADDRESSES_PATH + '/payment-9.addr']
-# SRC_KEYS = [KEYS_PATH + '/payment-9.skey']
 
 # destination addresses (in individual text files)
 #
@@ -47,7 +20,80 @@ SRC_KEYS = [
 # if there is only one destination address and the amount is 0
 # all the amounts in the source addresses (minus fee)
 # will be sent to the destination address
+
+
+# 1
+SRC_ADDRESSES = [
+    ADDRESSES_PATH + '/payment-1.addr',
+    ADDRESSES_PATH + '/payment-2.addr'
+]
+SRC_KEYS = [
+    KEYS_PATH + '/payment-1.skey',
+    KEYS_PATH + '/payment-2.skey'
+]
+
+DST_ADDRESSES = [
+    ADDRESSES_PATH + '/payment-3.addr',
+    ADDRESSES_PATH + '/payment-4.addr',
+    ADDRESSES_PATH + '/payment-9.addr'
+]
+AMOUNTS = [
+    100000000,
+    [
+        {'token': 'lovelace', 'amount': '20000000'},
+        {'token': '6b8d07d69639e9413dd637a1a815a7323c69c86abbafb66dbfdb1aa7', 'amount': '2'}
+    ]
+]
+
+
+"""
+# 2
+SRC_ADDRESSES = [
+    ADDRESSES_PATH + '/payment-3.addr',
+    ADDRESSES_PATH + '/payment-4.addr',
+    ADDRESSES_PATH + '/payment-9.addr'
+]
+SRC_KEYS = [
+    KEYS_PATH + '/payment-3.skey',
+    KEYS_PATH + '/payment-4.skey',
+    KEYS_PATH + '/payment-9.skey'
+]
+
+DST_ADDRESSES = [
+    ADDRESSES_PATH + '/payment-5.addr',
+    ADDRESSES_PATH + '/payment-7.addr'
+]
+AMOUNTS = [
+    [
+        {'token': 'lovelace', 'amount': '10000000'},
+        {'token': '6b8d07d69639e9413dd637a1a815a7323c69c86abbafb66dbfdb1aa7', 'amount': '1'}
+    ],
+    [
+        {'token': 'lovelace', 'amount': '30000000'},
+        {'token': '6b8d07d69639e9413dd637a1a815a7323c69c86abbafb66dbfdb1aa7', 'amount': '1'}
+    ]
+]
+"""
+"""
+# 3
+SRC_ADDRESSES = [
+    ADDRESSES_PATH + '/payment-3.addr',
+    ADDRESSES_PATH + '/payment-5.addr',
+    ADDRESSES_PATH + '/payment-7.addr'
+]
+SRC_KEYS = [
+    KEYS_PATH + '/payment-3.skey',
+    KEYS_PATH + '/payment-5.skey',
+    KEYS_PATH + '/payment-7.skey'
+]
+DST_ADDRESSES = [ADDRESSES_PATH + '/dev_wallet.addr']
+AMOUNTS = [0]
+"""
+
+
+"""
 #
+# other examples
 #
 
 DST_ADDRESSES = [ADDRESSES_PATH + '/dev_wallet.addr']
@@ -56,20 +102,6 @@ AMOUNTS = [
         {'token': 'lovelace', 'amount': 0}
     ]
 ]
-
-"""
-DST_ADDRESSES = [
-    ADDRESSES_PATH + '/payment-3.addr',
-    ADDRESSES_PATH + '/payment-4.addr',
-    ADDRESSES_PATH + '/payment-9.addr'
-]
-AMOUNTS = [
-    3000000,
-    [{'token': 'lovelace', 'amount': 2000000}]
-]
-"""
-"""
-DST_ADDRESSES = [ADDRESSES_PATH + '/payment-2.addr', ADDRESSES_PATH + '/payment-6.addr', ADDRESSES_PATH + '/payment-1.addr']
 AMOUNTS = [
     [
         {'token': 'lovelace', 'amount': '15000000'},

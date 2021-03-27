@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 
 
-# Created: 11.03.2021
-# Updated: 20.03.2021
-# Updated: 26.03.2021 - Token Transactions
-# Updated: 27.03.2021 - Bug fixes, validation
+"""
+Created: 11.03.2021
+Updated: 20.03.2021
+Updated: 26.03.2021 - Token Transactions
+Updated: 27.03.2021 - Bug fixes, validation, tests
+"""
+
 
 import json
 from library import *
@@ -51,7 +54,7 @@ if __name__ == '__main__':
             src_token_transactions += token_trans
     # debug
     if len(src_transactions) == 0 and len(src_token_transactions) == 0:
-        print('No source transactions!')
+        print('No source transactions (UTXOs)!')
         sys.exit(1)
     # print('Source transactions: %s' % src_transactions)
     # print('Source token transactions: %s' % src_token_transactions)

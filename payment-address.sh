@@ -2,7 +2,20 @@
 
 KEYS_PATH=keys
 ADDRESSES_PATH=addresses
+FILES_PATH=files
 CARDANO_NET="--testnet-magic 1097911063"
+
+if [ ! -d ${KEYS_PATH} ] ; then
+ mkdir ${KEYS_PATH}
+fi
+
+if [ ! -d ${ADDRESSES_PATH} ] ; then
+ mkdir ${ADDRESSES_PATH}
+fi
+
+if [ ! -d ${FILES_PATH} ] ; then
+ mkdir ${FILES_PATH}
+fi
 
 for i in {1..10}
 do
