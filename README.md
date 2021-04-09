@@ -167,7 +167,8 @@ into the "{'token': 'lovelace', 'amount': '30000000'}" format.
 Just like mentioned before, if the last amount is 0 (specified as integer: 0 or as dictionary: "{'token': 'lovelace', 'amount': '0'}"), the remaining tADA and other tokens will be transferred to the last destination address in the list.
 
 ### Changelog
-- 11.03.2021 - First version
-- 20.03.2021 - Update
-- 26.03.2021 - Token Transactions
+- 09.04.2021 - Update for compatibility with cardano-cli version 1.26.1
 - 27.03.2021 - Bug fixes, validation, tests, Documentation
+- 26.03.2021 - Token Transactions
+- 20.03.2021 - Update
+- 11.03.2021 - First version, compatible with cardano-cli version 1.25.1

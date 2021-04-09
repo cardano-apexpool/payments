@@ -19,8 +19,7 @@ if __name__ == '__main__':
     amounts, spend_amounts = transform_amounts(AMOUNTS)
 
     # generate the protocol file
-    cmd = ["cardano-cli", "query", "protocol-parameters", "--" + CARDANO_ERA +
-           "-era", CARDANO_NET, str(MAGIC_NUMBER), "--out-file", PROTOCOL_FILE]
+    cmd = ["cardano-cli", "query", "protocol-parameters", CARDANO_NET, str(MAGIC_NUMBER), "--out-file", PROTOCOL_FILE]
     _, _ = cardano_cli_cmd(cmd)
 
     # query tip
@@ -28,7 +27,7 @@ if __name__ == '__main__':
     out, err = cardano_cli_cmd(cmd)
 
     # set transaction expire time in TRANSACTION_EXPIRE seconds (default 300)
-    expire = json.loads(out)['slotNo'] + TRANSACTION_EXPIRE
+    expire = json.loads(out)['slot'] + TRANSACTION_EXPIRE
 
     # get the list of transactions from all source addresses
     src_transactions = []

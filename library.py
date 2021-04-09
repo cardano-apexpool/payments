@@ -12,8 +12,7 @@ def get_transactions(address, tokens_amounts):
             ada_transactions: list of transactions with lovelace only
             token_transactions: list of transactions including custom tokens
     """
-    cmd = ["cardano-cli", "query", "utxo", "--address", address, "--" + CARDANO_ERA +
-           "-era", CARDANO_NET, str(MAGIC_NUMBER)]
+    cmd = ["cardano-cli", "query", "utxo", "--address", address, CARDANO_NET, str(MAGIC_NUMBER)]
     out, err = cardano_cli_cmd(cmd)
     ada_transactions = []
     token_transactions = []
@@ -193,7 +192,7 @@ def create_transaction(src_transactions, src_token_transactions, src_address, ds
                     tokens_amounts[ta] -= tokens_amounts[ta]
             cmd += [extra_cmd]
             outcount += 1
-    cmd += ["--" + CARDANO_ERA + "-era", "--invalid-hereafter", str(validity), "--fee", str(fee), "--out-file", outfile]
+    cmd += ["--invalid-hereafter", str(validity), "--fee", str(fee), "--out-file", outfile]
     # debug
     if fee != 200000:
         # print('tokens_amounts left (should be 0 now): %s' % tokens_amounts)
