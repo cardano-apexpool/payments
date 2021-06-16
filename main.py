@@ -10,6 +10,7 @@ Updated: 27.03.2021 - Bug fixes, validation, tests
 
 
 import json
+import datetime
 from library import *
 
 
@@ -19,11 +20,17 @@ if __name__ == '__main__':
     amounts, spend_amounts = transform_amounts(AMOUNTS)
 
     # generate the protocol file
-    cmd = ["cardano-cli", "query", "protocol-parameters", CARDANO_NET, str(MAGIC_NUMBER), "--out-file", PROTOCOL_FILE]
+    if len(MAGIC_NUMBER) == 0:
+        cmd = ["cardano-cli", "query", "protocol-parameters", CARDANO_NET, "--out-file", PROTOCOL_FILE]
+    else:
+        cmd = ["cardano-cli", "query", "protocol-parameters", CARDANO_NET, str(MAGIC_NUMBER), "--out-file", PROTOCOL_FILE]
     _, _ = cardano_cli_cmd(cmd)
 
     # query tip
-    cmd = ["cardano-cli", "query", "tip", CARDANO_NET, str(MAGIC_NUMBER)]
+    if len(MAGIC_NUMBER) == 0:
+        cmd = ["cardano-cli", "query", "tip", CARDANO_NET]
+    else:
+        cmd = ["cardano-cli", "query", "tip", CARDANO_NET, str(MAGIC_NUMBER)]
     out, err = cardano_cli_cmd(cmd)
 
     # set transaction expire time in TRANSACTION_EXPIRE seconds (default 300)
@@ -58,8 +65,8 @@ if __name__ == '__main__':
     # print('Source transactions: %s' % src_transactions)
     # print('Source token transactions: %s' % src_token_transactions)
     # print('Change address (if required): %s' % src_address)
-    print('Tokens amounts: %s' % tokens_amounts)
-    print("Amounts to spend: %s" % spend_amounts)
+    #print('Tokens amounts: %s' % tokens_amounts)
+    #print("Amounts to spend: %s" % spend_amounts)
 
     # validate transation
     if not validate_transaction(spend_amounts, tokens_amounts):
@@ -80,10 +87,10 @@ if __name__ == '__main__':
     if len(dst_addresses) == 0:
         print('No destination addresses!')
         sys.exit(1)
-    print('Destination addresses: %s\n' % dst_addresses)
+    #print('Destination addresses: %s\n' % dst_addresses)
 
     # create draft transaction
-    _, err, incount, outcount = create_transaction(src_transactions, src_token_transactions,
+    _, err, incount, outcount, cmd_transaction = create_transaction(src_transactions, src_token_transactions,
                                                            src_address, dst_addresses, 200000, 'tx.draft',
                                                            expire, amounts, tokens_amounts)
     if err:
@@ -97,10 +104,10 @@ if __name__ == '__main__':
     else:
         print(err)
         sys.exit(1)
-    print('Transaction fee: %s\n' % fee)
+    #print('Transaction fee: %s\n' % fee)
 
     # create transaction
-    _, err, incount, outcount = create_transaction(src_transactions, src_token_transactions,
+    _, err, incount, outcount, cmd_transaction = create_transaction(src_transactions, src_token_transactions,
                                                            src_address, dst_addresses, fee, 'tx.raw',
                                                            expire, amounts, tokens_amounts)
     if err:
@@ -113,11 +120,48 @@ if __name__ == '__main__':
         print(err)
         sys.exit(1)
 
+    # Transaction
+    print('Tokens amounts: %s' % tokens_amounts)
+    print('Amounts to spend: %s' % spend_amounts)
+    print('Destination addresses: %s\n' % dst_addresses)
+    print('Transaction fee: %s\n' % fee)
+    print('Command to execute: %s\n' % cmd_transaction)
+
+    if len(MAGIC_NUMBER) == 0:
+        cmd = ["cardano-cli", "transaction", "submit", "--tx-file", 'tx.signed', CARDANO_NET]
+    else:
+        cmd = ["cardano-cli", "transaction", "submit", "--tx-file", 'tx.signed', CARDANO_NET, str(MAGIC_NUMBER)]
+    # submit transaction
+    """
+    out, err = cardano_cli_cmd(cmd)
+    if err:
+        print(err)
+        sys.exit(1)
+    print('Transaction executed')
+    print(out)
+    """
+    with(open(LOG_FILE, 'a')) as lf:
+        lf.write('------------------------------------------\n')
+        lf.write('%s\n' % datetime.datetime.now().strftime("%d.%b %Y %H:%M:%S"))
+        lf.write('Tokens amounts: %s\n' % tokens_amounts)
+        lf.write('Amounts to spend: %s\n' % spend_amounts)
+        lf.write('Destination addresses: %s\n' % dst_addresses)
+        lf.write('Transaction fee: %s\n' % fee)
+        lf.write('Command to execute: %s\n' % cmd_transaction)
+        #lf.write(out)
+        lf.write('------------------------------------------\n')
+    #sys.exit(0)
+
     # ask for confirmation before sending the transaction
     while True:
         reply = input('Confirm? [y/n] ')
         if reply.lower() in ('y', 'yes'):
-            cmd = ["cardano-cli", "transaction", "submit", "--tx-file", 'tx.signed', CARDANO_NET, str(MAGIC_NUMBER)]
+            """
+            if len(MAGIC_NUMBER) == 0:
+                cmd = ["cardano-cli", "transaction", "submit", "--tx-file", 'tx.signed', CARDANO_NET]
+            else:
+                cmd = ["cardano-cli", "transaction", "submit", "--tx-file", 'tx.signed', CARDANO_NET, str(MAGIC_NUMBER)]
+            """
             # submit transaction
             out, err = cardano_cli_cmd(cmd)
             if err:

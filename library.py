@@ -12,7 +12,10 @@ def get_transactions(address, tokens_amounts):
             ada_transactions: list of transactions with lovelace only
             token_transactions: list of transactions including custom tokens
     """
-    cmd = ["cardano-cli", "query", "utxo", "--address", address, CARDANO_NET, str(MAGIC_NUMBER)]
+    if len(MAGIC_NUMBER) == 0:
+        cmd = ["cardano-cli", "query", "utxo", "--address", address, CARDANO_NET]
+    else:
+        cmd = ["cardano-cli", "query", "utxo", "--address", address, CARDANO_NET, str(MAGIC_NUMBER)]
     out, err = cardano_cli_cmd(cmd)
     ada_transactions = []
     token_transactions = []
@@ -196,9 +199,10 @@ def create_transaction(src_transactions, src_token_transactions, src_address, ds
     # debug
     if fee != 200000:
         # print('tokens_amounts left (should be 0 now): %s' % tokens_amounts)
-        print('command to execute: %s' % " ".join(cmd))
+        #print('command to execute: %s' % " ".join(cmd))
+        pass
     out, err = cardano_cli_cmd(cmd)
-    return out, err, incount, outcount
+    return out, err, incount, outcount, cmd
 
 
 def calculate_fee(infile, incount, outcount, keys_count):
@@ -212,7 +216,10 @@ def calculate_fee(infile, incount, outcount, keys_count):
     """
     cmd = ["cardano-cli", "transaction", "calculate-min-fee", "--tx-body-file", infile, "--tx-in-count", str(incount)]
     cmd += ["--tx-out-count", str(outcount), "--witness-count", str(keys_count), "--byron-witness-count", "0"]
-    cmd += ["--testnet-magic", str(MAGIC_NUMBER), "--protocol-params-file", PROTOCOL_FILE]
+    if len(MAGIC_NUMBER) == 0:
+        cmd += [CARDANO_NET, "--protocol-params-file", PROTOCOL_FILE]
+    else:
+        cmd += [CARDANO_NET, str(MAGIC_NUMBER), "--protocol-params-file", PROTOCOL_FILE]
     out, err = cardano_cli_cmd(cmd)
     return out, err
 
@@ -228,7 +235,10 @@ def sign_transaction(payment_skeys, infile, outfile):
     cmd = ["cardano-cli", "transaction", "sign", "--tx-body-file", infile]
     for pkey in payment_skeys:
         cmd += ["--signing-key-file", pkey]
-    cmd += [CARDANO_NET, str(MAGIC_NUMBER), "--out-file", outfile]
+    if len(MAGIC_NUMBER) == 0:
+        cmd += [CARDANO_NET, "--out-file", outfile]
+    else:
+        cmd += [CARDANO_NET, str(MAGIC_NUMBER), "--out-file", outfile]
     out, err = cardano_cli_cmd(cmd)
     return out, err
 
