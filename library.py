@@ -1,6 +1,46 @@
 import sys
 import subprocess
+import json
 from config import *
+
+
+def get_wallet_transactions(wallet_id):
+    """
+    Get the list of transactions in a wallet
+    :param wallet_id: wallet id
+    :return: list of transactions
+    """
+    cmd = ["cardano-wallet", "transaction", "list", wallet_id]
+    out, err = cardano_cli_cmd(cmd)
+    trans = json.loads(out[out.find('['):])
+    return trans, err
+
+
+def filter_wallet_transactions(transactions, direction, address):
+    """
+    Filter transactions in a wallet byt direction and address
+    :param transactions: list of transactions as provided by cardano-wallet
+    :param direction: incoming or outgoing
+    :param address: output address
+    :return: list of filtered transactions
+    """
+    f_transactions = []
+    for trans in transactions:
+        if trans['direction'] == direction:
+            for _o in trans['outputs']:
+                if _o['address'] == address:
+                    f_trans = {}
+                    print("Id: %s" % trans['id'])
+                    print("Status: %s" % trans['status'])
+                    print("Amount: %s" % _o['amount'])
+                    print("Assets: %s" % _o['assets'])
+                    f_trans['id'] = trans['id']
+                    f_trans['input'] = trans['inputs'][0]['id']
+                    f_trans['status'] = trans['status']
+                    f_trans['amount'] = _o['amount']['quantity']
+                    f_trans['assets'] = _o['assets']
+                    f_transactions.append(f_trans)
+    return f_transactions
 
 
 def get_transactions(address, tokens_amounts):
@@ -25,7 +65,7 @@ def get_transactions(address, tokens_amounts):
                 transaction = {}
                 trans = line.split()
                 # if only lovelace
-                if len(trans) == 4:
+                if len(trans) == 6:
                     transaction['hash'] = trans[0]
                     transaction['id'] = trans[1]
                     transaction['amount'] = trans[2]
@@ -299,7 +339,8 @@ def cardano_cli_cmd(cmd):
         stderr=subprocess.PIPE).communicate()
     out = out.decode('utf-8')
     err = err.decode('utf-8')
-    if err:
+    if err and 'Warning' not in err and 'Ok.' not in err:
+        print(cmd)
         print(err)
         sys.exit(1)
     return out, err
