@@ -43,7 +43,7 @@ def filter_wallet_transactions(transactions, direction, address):
     return f_transactions
 
 
-def get_transactions(address, tokens_amounts):
+def get_transactions(address, tokens_amounts, max_utxos=10000):
     """
     Get the list of transactions from the given addresses.
     :param address: Cardano Blockchain address to search for UTXOs
@@ -59,8 +59,12 @@ def get_transactions(address, tokens_amounts):
     out, err = cardano_cli_cmd(cmd)
     ada_transactions = []
     token_transactions = []
+    nr_utxos = 0
     if not err:
         for line in out.splitlines():
+            nr_utxos += 1
+            if nr_utxos > max_utxos:
+                break
             if 'lovelace' in line:
                 transaction = {}
                 trans = line.split()

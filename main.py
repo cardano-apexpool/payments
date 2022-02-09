@@ -51,7 +51,7 @@ if __name__ == '__main__':
         except Exception as err:
             print('Error while opening the file: %s' % err)
             sys.exit(1)
-        trans, token_trans, out, err = get_transactions(src_addr, tokens_amounts)
+        trans, token_trans, out, err = get_transactions(src_addr, tokens_amounts, MAX_IN_UTXOS)
         if err:
             print(err)
             sys.exit(1)
