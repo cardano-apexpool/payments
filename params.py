@@ -12,6 +12,6 @@ PROTOCOL_FILE = os.getenv('PROTOCOL_FILE', FILES_PATH + '/protocol-parameters.js
 #CARDANO_NET = os.getenv('CARDANO_NET', '--mainnet')
 #MAGIC_NUMBER = os.getenv('MAGIC_NUMBER', '')
 CARDANO_NET = os.getenv('CARDANO_NET', '--testnet-magic')
-MAGIC_NUMBER = os.getenv('MAGIC_NUMBER', '1097911063')
+MAGIC_NUMBER = os.getenv('MAGIC_NUMBER', '2')
 TRANSACTION_EXPIRE = os.getenv('TRANSACTION_EXPIRE', 300)
 MAX_IN_UTXOS = 250
